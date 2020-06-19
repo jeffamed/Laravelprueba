@@ -17,14 +17,14 @@
 		</div>
 	</div>	
 	<form method="POST" action="/compras/factura"> 
-		{{-- @csrf --}}
+	 @csrf 
 		<div class="row">
 			<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 				<div class="form-group">
-					<label for="proveedor">Proveedor</label>
-					<select name="idproveedor" id="idproveedor" class="form-control selectpicker" data-live-search="true">
-						@foreach($personas as $persona)
-						<option value="{{$persona->idpersona}}">{{$persona->nombre}}</option>
+					<label for="cliente">Cliente</label>
+					<select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true">
+						@foreach($clientes as $persona)
+						<option value="{{$persona->id}}">{{$persona->nombre}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -32,24 +32,11 @@
 			
 			<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
 				<div class="form-group">
-					<label>Tipo comprobante</label>
-					<select name="tipo_comprobante" class="form-control">
-						<option value="Boleta">Boleta</option>
-						<option value="Factura">Factura</option>
-						<option value="Ticket">Ticket</option>
+					<label>Tipo Factura</label>
+					<select name="tipofactura" class="form-control">
+						<option value="Cordoba">Cordoba</option>
+						<option value="Dolar">Dolar</option>
 					</select>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-				<div class="form-group">
-					<label for="serie_comprobante">Serie Comprobante</label>
-					<input type="text" name="serie_comprobante" value="{{old('serie_comprobante')}}" class="form-control" placeholder="Series del comprobante..">
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-				<div class="form-group">
-					<label for="num_comprobante">Numero Comprobante</label>
-					<input type="text" name="num_comprobante" value="{{old('num_comprobante')}}" required class="form-control" placeholder="Numeros del comprobante..">
 				</div>
 			</div>
 		</div>
@@ -60,8 +47,8 @@
 						<div class="form-group">
 							<label>Articulo</label>
 							<select name="idarticulo" class="form-control" id="pidarticulo" data-live-search="true">
-								@foreach($articulos as $articulo)
-								<option value="{{$articulo->idarticulo}}">{{$articulo->nombre}}</option>
+								@foreach($productos as $articulo)
+								<option value="{{$producto->id}}">{{$producto->nombre}}</option>
 								@endforeach
 							</select>
 						</div>
@@ -70,12 +57,6 @@
 						<div class="form-group">
 							<label for="cantidad">Cantidad</label>
 							<input type="number" name="cantidad" id="pcantidad" class="form-control" placeholder="Cantidad" min="0">
-						</div>
-					</div>
-					<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
-						<div class="form-group">
-							<label for="precio_comprar">Precio Compra</label>
-							<input type="number" name="precio_compra" id="pprecio_compra" class="form-control" placeholder="Precio compra" min="0">
 						</div>
 					</div>
 					<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
@@ -95,7 +76,6 @@
 								<th>Opciones</th>
 								<th>Articulo</th>
 								<th>Cantidad</th>
-								<th>Precio Compra</th>
 								<th>Precio Venta</th>
 								<th>Subtotal</th>
 							</thead>
