@@ -23,8 +23,8 @@
 				<div class="form-group">
 					<label for="cliente">Cliente</label>
 					<select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true">
-						@foreach($clientes as $persona)
-						<option value="{{$persona->id}}">{{$persona->nombre}}</option>
+						@foreach($clientes as $cliente)
+						<option value="{{$cliente->id}}">{{$cliente->nombre}}</option>
 						@endforeach
 					</select>
 				</div>
@@ -93,7 +93,7 @@
 									<th></th>
 									<th></th>
 									<th></th>
-									<th><h4 id="total">C$ 0.00</h4></th>
+									<th><h4 id="total">C$ 0.00</h4><input type="hidden" name="total" id="total_venta"></th>
 								</tr>
 							</tfoot>
 							<tbody>
@@ -102,10 +102,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12" id="guardar">
+			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
 				<div class="form-group">
 					@csrf
-					<button class="btn btn-primary" type="submit">Guardar</button>
+					<button class="btn btn-primary" id="guardar" type="submit">Guardar</button>
 					<button class="btn btn-danger" type="reset">Cancelar</button>
 				</div>
 			</div>

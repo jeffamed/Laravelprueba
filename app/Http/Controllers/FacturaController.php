@@ -41,9 +41,8 @@ class FacturaController extends Controller
     public function create()
     {
         $cliente = DB::table('clientes')->where('estado','=','Activo')->get();
-        $tasa = DB::table('tasac')->orderBy('created_at','desc')->first();
         $producto= DB::table('productos')->where('estado','=','Activo')->get();
-        return view("compras.factura.create",["clientes"=>$cliente, "tasa"=>$tasa, "productos"=>$producto]);
+        return view("compras.factura.create",["clientes"=>$cliente, "productos"=>$producto]);
     }
 
     /**
@@ -54,10 +53,28 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        $idarticulo=$request->get('idarticulo');
+        $cantidad=$request->get('cantidad');
+        //$descuento=$request->get('descuento');
+        $precio_venta=$request->get('precio_venta');
+
+        $cont=0;
+        while ($cont < count($idarticulo)) {
+            $detalle = new DetalleFactura();
+            $detalle->idFactura=1;
+            $detalle->idProducto=$idarticulo[$cont];
+            $detalle->cantidad=$cantidad[$cont];
+            $detalle->precio=$precio_venta[$cont];
+            $detalle->save();
+            $cont=$cont+1;
+        }
+        /*try {
             DB::beginTransaction();
+                $tasa = DB::table('tasac')->orderBy('created_at','desc')->pluck('id')->first();
+
                 $factura = new Factura;
                 $factura->idcliente=$request->get('idcliente');
+                $factura->idTasa = $tasa;
                 $factura->tipofactura=$request->get('tipofactura');
                 $factura->total=$request->get('total');
                 $factura->estado='Activo';
@@ -71,10 +88,10 @@ class FacturaController extends Controller
                 $cont=0;
                 while ($cont < count($idarticulo)) {
                     $detalle = new DetalleFactura();
-                    $detalle->idventa=$factura->id;
-                    $detalle->idarticulo=$idarticulo[$cont];
+                    $detalle->idFactura=1;
+                    $detalle->idProducto=$idarticulo[$cont];
                     $detalle->cantidad=$cantidad[$cont];
-                    $detalle->precio_venta=$precio_venta[$cont];
+                    $detalle->precio=$precio_venta[$cont];
                     $detalle->save();
                     $cont=$cont+1;
                 }
@@ -85,7 +102,7 @@ class FacturaController extends Controller
         catch (\Exception $e) 
         {
             DB::rollback();
-        }
+        }*/
         return Redirect::to('compras/factura');
     }
 
@@ -99,17 +116,17 @@ class FacturaController extends Controller
     {
         $factura=DB::table('facturas as f')
         ->join('clientes as c','f.idCliente','=','c.id')
-        ->join('detalle_venta as dv','v.idventa','=','dv.idventa')
-        ->select('v.idventa','v.fecha_hora','p.nombre','v.tipo_comprobante','v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado','v.total_venta')
-        ->where('v.idventa','=',$id)
+        ->join('detalleFactura as df','f.id','=','df.idFactura')
+        ->select('f.id','f.created_at','f.total','f.tipoFactura','f.estado','c.nombre')
+        ->where('f.id','=',$id)
         ->first();
 
         $detalles=DB::table('detallefacturas as d')
-                ->join('articulo as a','d.idarticulo','=','a.idarticulo')
-                ->select('a.nombre as articulo','d.cantidad','d.descuento','d.precio_venta')
-                ->where('d.idventa','=',$id)
+                ->join('productos as p','d.idProducto','=','p.id')
+                ->select('p.nombre','d.cantidad','d.precio')
+                ->where('d.idFactura','=',$id)
                 ->get();
-        return view("ventas.venta.show",["venta"=>$factura,"detalles"=>$detalles]);
+        return view("compras.factura.show",["factura"=>$factura,"detalles"=>$detalles]);
     }
     /**
      * Remove the specified resource from storage.

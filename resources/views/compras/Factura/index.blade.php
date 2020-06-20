@@ -11,6 +11,7 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-condensed table-hover">
 			<thead>
+				<th>Num Factura</th>
 				<th>Fecha</th>
 				<th>Cliente</th>
 				<th>Tipo Factura</th>
@@ -21,6 +22,7 @@
 			</thead>
 			@foreach ($facturas as $ing)
 			<tr>
+				<td>{{$ing->id}}</td>
 				<td>{{$ing->created_at}}</td>
 				<td>{{$ing->nombre}}</td>
 				<td>{{$ing->tipoFactura }}</td>
