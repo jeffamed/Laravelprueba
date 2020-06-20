@@ -27,6 +27,8 @@ class FacturaController extends Controller
             ->join('clientes as c','f.idCliente','=','c.id')
             ->join('tasac as tc','f.idTasa','=','tc.id')
             ->select('f.id','f.idTasa','f.total','f.tipoFactura','f.Estado','c.Nombre','f.estado','tc.monto','c.nombre','f.created_at')
+            ->where('f.id','=',$query)
+            ->orWhere('c.nombre','LIKE','%'.$query.'%')
             ->orderBy('f.id','desc')
             ->paginate(5);
             return view('compras.factura.index',["facturas"=>$factura,"searchText"=>$query]);
@@ -53,22 +55,7 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
-        $idarticulo=$request->get('idarticulo');
-        $cantidad=$request->get('cantidad');
-        //$descuento=$request->get('descuento');
-        $precio_venta=$request->get('precio_venta');
-
-        $cont=0;
-        while ($cont < count($idarticulo)) {
-            $detalle = new DetalleFactura();
-            $detalle->idFactura=1;
-            $detalle->idProducto=$idarticulo[$cont];
-            $detalle->cantidad=$cantidad[$cont];
-            $detalle->precio=$precio_venta[$cont];
-            $detalle->save();
-            $cont=$cont+1;
-        }
-        /*try {
+            try {
             DB::beginTransaction();
                 $tasa = DB::table('tasac')->orderBy('created_at','desc')->pluck('id')->first();
 
@@ -88,7 +75,7 @@ class FacturaController extends Controller
                 $cont=0;
                 while ($cont < count($idarticulo)) {
                     $detalle = new DetalleFactura();
-                    $detalle->idFactura=1;
+                    $detalle->idFactura=$factura->id;
                     $detalle->idProducto=$idarticulo[$cont];
                     $detalle->cantidad=$cantidad[$cont];
                     $detalle->precio=$precio_venta[$cont];
@@ -102,7 +89,7 @@ class FacturaController extends Controller
         catch (\Exception $e) 
         {
             DB::rollback();
-        }*/
+        }
         return Redirect::to('compras/factura');
     }
 
@@ -121,7 +108,7 @@ class FacturaController extends Controller
         ->where('f.id','=',$id)
         ->first();
 
-        $detalles=DB::table('detallefacturas as d')
+        $detalles=DB::table('detallefactura as d')
                 ->join('productos as p','d.idProducto','=','p.id')
                 ->select('p.nombre','d.cantidad','d.precio')
                 ->where('d.idFactura','=',$id)

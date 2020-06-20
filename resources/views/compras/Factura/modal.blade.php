@@ -10,7 +10,7 @@ role="dialog" tabindex="-1" id="model-delete-{{$ing->id}}">
 				<button type="button" class="close" data-dismiss="modal" aria-Label="Close">
 					<span aria-hidden="true">X</span>
 				</button>
-				<h4 class="modal-title">Anular factura</h4>
+				<h4 class="modal-title">Anular factura {{$ing->id}}</h4>
 			</div>
 			<div class="modal-body">
 				<p>Confirme si desea anular el factura</p>
