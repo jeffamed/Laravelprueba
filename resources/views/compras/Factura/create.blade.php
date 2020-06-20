@@ -19,7 +19,7 @@
 	<form method="POST" action="/compras/factura"> 
 	 @csrf 
 		<div class="row">
-			<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+			<div class="col-lg-9 col-sm-12 col-md-12 col-xs-12">
 				<div class="form-group">
 					<label for="cliente">Cliente</label>
 					<select name="idcliente" id="idcliente" class="form-control selectpicker" data-live-search="true">
@@ -30,10 +30,10 @@
 				</div>
 			</div>
 			
-			<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
+			<div class="col-lg-3 col-sm-4 col-md-4 col-xs-12">
 				<div class="form-group">
 					<label>Tipo Factura</label>
-					<select name="tipofactura" class="form-control">
+					<select name="tipofactura" class="form-control" id="selecttipo">
 						<option value="Cordoba">Cordoba</option>
 						<option value="Dolar">Dolar</option>
 					</select>
@@ -48,7 +48,7 @@
 							<label>Articulo</label>
 							<select name="idarticulo" class="form-control" id="pidarticulo" data-live-search="true">
 								@foreach($productos as $articulo)
-								<option value="{{$producto->id}}">{{$producto->nombre}}</option>
+								<option value="{{$articulo->id}}_{{$articulo->stock}}_{{$articulo->precioDolar}}_{{$articulo->precioCordoba}}">{{$articulo->nombre}}</option>
 								@endforeach
 							</select>
 						</div>
@@ -61,8 +61,14 @@
 					</div>
 					<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
 						<div class="form-group">
+							<label for="stock">Stock</label>
+							<input type="number" name="pstock" id="pstock" class="form-control" placeholder="Stock" min="0" disabled>
+						</div>
+					</div>
+					<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
+						<div class="form-group">
 							<label for="precio_cventa">Precio Venta</label>
-							<input type="number" name="precio_venta" id="pprecio_venta" class="form-control" placeholder="Precio Venta" min="0">
+							<input type="number" name="precio_venta" id="pprecio_venta" class="form-control" placeholder="Precio Venta" min="0" disabled>
 						</div>
 					</div>
 					<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
@@ -77,15 +83,18 @@
 								<th>Articulo</th>
 								<th>Cantidad</th>
 								<th>Precio Venta</th>
+								<th>IVA</th>
 								<th>Subtotal</th>
 							</thead>
 							<tfoot>
-								<th>Total</th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
-								<th><h4 id="total">C$ 0.00</h4></th>
+								<tr>
+									<th>Total</th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th><h4 id="total">C$ 0.00</h4></th>
+								</tr>
 							</tfoot>
 							<tbody>
 							</tbody>
@@ -119,39 +128,57 @@
 			total=0;
 			subtotal=[];
 			$("#guardar").hide();
+			$("#pidarticulo").change(mostrarValores);
+
+			function mostrarValores() {
+				tipofactura = $('#selecttipo').val();
+				datosArticulos=document.getElementById("pidarticulo").value.split('_');
+				$("#pstock").val(datosArticulos[1]);
+				if(tipofactura == 'Dolar'){
+					$("#pprecio_venta").val(datosArticulos[2]);
+				}else{
+					$("#pprecio_venta").val(datosArticulos[3]);
+				}
+			}
 
 			function agregar()
 			{
-				idarticulo=$("#pidarticulo").val();
+				datosArticulos=document.getElementById("pidarticulo").value.split("_");
+				idarticulo=datosArticulos[0];
 				articulo=$("#pidarticulo option:selected").text();
-				// cantidad=$("#pcantidad").val();
-				cantidad=document.getElementById("pcantidad").value;
-				precio_compra=$("#pprecio_compra").val();
+				cantidad=$("#pcantidad").val();
 				precio_venta=$("#pprecio_venta").val();
+				stock=$("#pstock").val();
+				tipofactura = $('#selecttipo').val();
 
-				if (idarticulo!="" && cantidad!="" && cantidad>0 && precio_compra!="" && precio_venta!="") 
+				if (idarticulo!="" && cantidad!="" && cantidad>0  && precio_venta!="") 
 				{
-					subtotal[cont]=(cantidad*precio_compra);
+					iva=(cantidad*precio_venta)*(0.15);
+					subtotal[cont]=(cantidad*precio_venta)+iva;
 					total=total+subtotal[cont];
 
-					var fila='<tr class="select" id="fila'+cont+'"><td><button class="btn btn-warning" onclick="eliminar('+cont+');">&times</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="hidden" name="cantidad[]" value="'+cantidad+'">'+cantidad+'</td><td><input type="hidden" name="precio_compra[]" value="'+precio_compra+'">'+precio_compra+'</td><td><input type="hidden" name="precio_venta[]" value="'+precio_venta+'">'+precio_venta+'</td><td>'+subtotal[cont]+'</td></tr>';
-					
+					var fila='<tr class="select" id="fila'+cont+'"><td><button class="btn btn-warning" onclick="eliminar('+cont+');">&times</button></td><td><input type="hidden" name="idarticulo[]" value="'+idarticulo+'">'+articulo+'</td><td><input type="hidden" name="cantidad[]" value="'+cantidad+'">'+cantidad+'</td><td><input type="hidden" name="precio_venta[]" value="'+precio_venta+'">'+precio_venta+'</td><td>15%</td><td>'+subtotal[cont]+'</td></tr>';
 					cont++;
 					limpiar();
-					$("#total").html("C$ "+total);
+					if(tipofactura == 'Cordoba'){
+						$("#total").html("C$ "+total);
+					}else{
+						$("#total").html("$ "+total);
+					}
+					$("#total_venta").val(total);
 					evaluar();
 					$("#detalles").append(fila);
 				}
 				else
 				{
-					alert("Error al ingresar el detalle de factura, revise los datos del articulo");
+					alert("Error al ingresar el detalle de ingreso, revise los datos del articulo");
 				}
 			}
 
 			function limpiar()
 			{
 				$("#pcantidad").val("");
-				$("#pprecio_compra").val("");
+				//$("#pprecio_compra").val("");
 				$("#pprecio_venta").val("");
 
 			}
@@ -169,8 +196,16 @@
 			}
 
 			function eliminar(index) {
+				tipofactura = $('#selecttipo').val();
+				//subtotal=subtotal-subtotal[index];
 				total=total-subtotal[index];
-				$("#total").html("C$ "+total);
+
+				if(tipofactura == 'Cordoba'){
+					$("#total").html("C$ "+total);
+				}else{
+					$("#total").html("$ "+total);
+				}
+				
 				$("#fila"+ index).remove();
 				evaluar();
 			}

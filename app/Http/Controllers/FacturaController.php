@@ -54,7 +54,39 @@ class FacturaController extends Controller
      */
     public function store(Request $request)
     {
-        
+        try {
+            DB::beginTransaction();
+                $factura = new Factura;
+                $factura->idcliente=$request->get('idcliente');
+                $factura->tipofactura=$request->get('tipofactura');
+                $factura->total=$request->get('total');
+                $factura->estado='Activo';
+                $factura->save();
+
+                $idarticulo=$request->get('idarticulo');
+                $cantidad=$request->get('cantidad');
+                //$descuento=$request->get('descuento');
+                $precio_venta=$request->get('precio_venta');
+
+                $cont=0;
+                while ($cont < count($idarticulo)) {
+                    $detalle = new DetalleFactura();
+                    $detalle->idventa=$factura->id;
+                    $detalle->idarticulo=$idarticulo[$cont];
+                    $detalle->cantidad=$cantidad[$cont];
+                    $detalle->precio_venta=$precio_venta[$cont];
+                    $detalle->save();
+                    $cont=$cont+1;
+                }
+            
+            DB::commit();
+
+        }
+        catch (\Exception $e) 
+        {
+            DB::rollback();
+        }
+        return Redirect::to('compras/factura');
     }
 
     /**
@@ -65,32 +97,20 @@ class FacturaController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        $factura=DB::table('facturas as f')
+        ->join('clientes as c','f.idCliente','=','c.id')
+        ->join('detalle_venta as dv','v.idventa','=','dv.idventa')
+        ->select('v.idventa','v.fecha_hora','p.nombre','v.tipo_comprobante','v.serie_comprobante','v.num_comprobante','v.impuesto','v.estado','v.total_venta')
+        ->where('v.idventa','=',$id)
+        ->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $detalles=DB::table('detallefacturas as d')
+                ->join('articulo as a','d.idarticulo','=','a.idarticulo')
+                ->select('a.nombre as articulo','d.cantidad','d.descuento','d.precio_venta')
+                ->where('d.idventa','=',$id)
+                ->get();
+        return view("ventas.venta.show",["venta"=>$factura,"detalles"=>$detalles]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -99,6 +119,9 @@ class FacturaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $factura=Factura::findOrFail($id);
+        $factura->Estado='Anulada';
+        $factura->update();
+        return Redirect::to('compras/factura');
     }
 }
