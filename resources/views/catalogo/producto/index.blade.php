@@ -19,6 +19,7 @@
 				<th>Nombre</th>
 				<th>Precio C$</th>
 				<th>Precio $</th>
+				<th>Existencia</th>
 				<th>Descripción</th>
 				<th>Opciones</th>
 			</thead>
@@ -28,6 +29,7 @@
 				<td>{{$cat->nombre}}</td>
 				<td>{{$cat->precioCordoba}}</td>
 				<td>{{$cat->precioDolar}}</td>
+				<td>{{$cat->stock}}</td>
 				<td>{{$cat->descripcion}}</td>
 				<td style="text-align: center;">
 					<a href="/catalogo/producto/{{$cat->id}}/edit" class="btn btn-info"><span class="fa fa-edit"></span> Editar</a>

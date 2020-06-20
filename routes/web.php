@@ -21,3 +21,5 @@ Route::resource('catalogo/cliente', 'ClienteController');
 Route::resource('catalogo/producto', 'ProductoController');
 Route::resource('compras/tasa', 'TCambioController');
 Route::resource('compras/factura', 'FacturaController');
+
+

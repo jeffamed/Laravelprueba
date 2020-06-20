@@ -110,6 +110,17 @@
                 <li><a href="../compras/tasa"><i class="fa fa-circle-o"></i> Tasa de Cambio</a></li>
               </ul>
             </li>
+
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-file-pdf-o"></i>
+                <span>Reportes</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="../reporte/ventas"><i class="fa fa-circle-o"></i> Ventas por mes</a></li>
+              </ul>
+            </li>
                         
           </ul>
         </section>
