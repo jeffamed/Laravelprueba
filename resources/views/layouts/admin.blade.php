@@ -27,7 +27,7 @@
       <header class="main-header">
 
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="{{ url('/') }}" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini">CLN</span>
           <!-- logo for regular state and mobile devices -->
@@ -94,8 +94,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="../catalogo/producto"><i class="fa fa-circle-o"></i> Productos</a></li>
-                <li><a href="../catalogo/cliente"><i class="fa fa-circle-o"></i> Clientes</a></li>
+                <li><a href="{{ url('/catalogo/producto') }}"><i class="fa fa-circle-o"></i> Productos</a></li>
+                <li><a href="{{ url('/catalogo/cliente') }}"><i class="fa fa-circle-o"></i> Clientes</a></li>
               </ul>
             </li>
             
@@ -106,8 +106,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="../compras/factura"><i class="fa fa-circle-o"></i> Facturar</a></li>
-                <li><a href="../compras/tasa"><i class="fa fa-circle-o"></i> Tasa de Cambio</a></li>
+                <li><a href="{{ url('/compras/factura') }}"><i class="fa fa-circle-o"></i> Facturar</a></li>
+                <li><a href="{{ url('/compras/tasa') }}"><i class="fa fa-circle-o"></i> Tasa de Cambio</a></li>
               </ul>
             </li>
 
@@ -165,13 +165,7 @@
 
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
-      <!--Fin-Contenido-->
-      <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
-        </div>
-        <strong>Copyright &copy; 2018-2020 <a href="www.jeffamed.com"></a>Tech</strong> All rights reserved.
-      </footer>
+     
 
       
     <!-- jQuery 2.1.4 -->

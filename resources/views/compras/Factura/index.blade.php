@@ -2,7 +2,7 @@
 @section('contenido')
 <div class="row">
 	<div class="col-lg-8 col-md-8 col-ms-8 col-xs-12">
-		<h3>Listado de facturas <a href="/compras/factura/create" class="btn btn-success"> <span class="fa fa-plus"></span> Nuevo</a></h3>
+		<h3>Listado de Facturas <a href="/compras/factura/create" class="btn btn-success"> <span class="fa fa-plus"></span> Nuevo</a></h3>
 		@include('compras.factura.search')
 	</div>
 </div>

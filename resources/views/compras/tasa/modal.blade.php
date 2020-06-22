@@ -1,9 +1,8 @@
 <div class="modal fade modal-slide-in-right" aria-hidden="true" 
 role="dialog" tabindex="-1" id="model-delete-{{$per->id}}">
-{{-- 	<form action="{{action('CategoriaController@destroy', $cat->idcategoria)}}" method="POST">
-	{{csrf_field()}}
-	<input type="hidden" name="_method" value="delete"> --}}
+
 {!! Form::open(['route'=>['tasa.destroy', $per->id], 'method'=>'delete']) !!}
+<input type="hidden" name="_method" value="delete">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -21,5 +20,7 @@ role="dialog" tabindex="-1" id="model-delete-{{$per->id}}">
 			</div>
 		</div>
 	</div>
+	{!! Form::close() !!}
+
 	{{-- </form> --}}
 </div>

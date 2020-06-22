@@ -21,5 +21,9 @@ Route::resource('catalogo/cliente', 'ClienteController');
 Route::resource('catalogo/producto', 'ProductoController');
 Route::resource('compras/tasa', 'TCambioController');
 Route::resource('compras/factura', 'FacturaController');
+Route::get('reporte/ventas','ReporteController@index');
+Route::get('/','ReporteController@info');
+//Route::get('reporte/ventas/pdf','ReporteController@reporte');
+Route::get('reporte/ventas/{tipoc}/{cliente}/{tipop}/{producto}/{mes}/pdf','ReporteController@reporte');
 
 

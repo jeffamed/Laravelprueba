@@ -128,4 +128,9 @@ class FacturaController extends Controller
         $factura->update();
         return Redirect::to('compras/factura');
     }
+
+    public function reporte(Request $request)
+    {
+        
+    }
 }

@@ -106,7 +106,7 @@
 				<div class="form-group">
 					@csrf
 					<button class="btn btn-primary" id="guardar" type="submit">Guardar</button>
-					<button class="btn btn-danger" type="reset">Cancelar</button>
+					<a class="btn btn-danger" href="{{url('/compras/factura')}}"><span class="fa fa-remove"></span> Cancelar</a>
 				</div>
 			</div>
 		</div>

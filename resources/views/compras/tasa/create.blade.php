@@ -19,12 +19,12 @@
 			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
 			<div class="form-group">
 				<label for="nombre">Monto</label>
-				<input type="text" name="monto" required value="{{old('monto')}}" class="form-control" placeholder="Nombre...">
+				<input type="number" name="monto" step=".1" required value="{{old('monto')}}" class="form-control" placeholder="00.00">
 			</div>
 			</div>
 			<div class="form-group">
 				<button class="btn btn-primary" type="submit"><span class="fa fa-save"></span> Guardar</button>
-				<button class="btn btn-danger" type="reset"><span class="fa fa-remove"></span> Cancelar</button>
+				<a class="btn btn-danger" href="{{url('/compras/tasa')}}"><span class="fa fa-remove"></span> Cancelar</a>
 			</div>
 				
 			</form>

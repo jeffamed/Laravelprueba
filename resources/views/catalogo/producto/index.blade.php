@@ -30,7 +30,7 @@
 				<td>{{$cat->precioCordoba}}</td>
 				<td>{{$cat->precioDolar}}</td>
 				<td>{{$cat->stock}}</td>
-				<td>{{$cat->descripcion}}</td>
+				<td style="width: 25%">{{$cat->descripcion}}</td>
 				<td style="text-align: center;">
 					<a href="/catalogo/producto/{{$cat->id}}/edit" class="btn btn-info"><span class="fa fa-edit"></span> Editar</a>
 					<a href="" data-target="#model-delete-{{$cat->id}}" data-toggle="modal" class="btn btn-danger"><span class="fa fa-remove"> Eliminar</a>

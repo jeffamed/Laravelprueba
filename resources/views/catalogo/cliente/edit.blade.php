@@ -35,7 +35,7 @@
 			</div>
 			<div class="form-group">
 				<button class="btn btn-primary" type="submit">Guardar</button>
-				<a href="{{route('cliente.index')}}"><button class="btn btn-danger" type="button">atras</button></a>
+				<a href="{{route('cliente.index')}}"><button class="btn btn-danger" type="button">Cancelar</button></a>
 			</div>
 			</form>
 
